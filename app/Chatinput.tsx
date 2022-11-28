@@ -4,9 +4,13 @@ import { FormEvent, useState } from "react"
 import { v4 as uuid } from 'uuid'
 import { Message } from "../typings"
 import useSWR from "swr"
+import fetcher from "../utils/fetchMessages"
 
 export default function Chatinput() {
     const [input, setInput] = useState("")
+    const{data,error,mutate} =useSWR("/api/getMessage",fetcher)
+
+    console.log(data)
 
     const addMessage = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
