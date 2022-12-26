@@ -8,44 +8,50 @@ import fetcher from "../utils/fetchMessages"
 
 export default function Chatinput() {
     const [input, setInput] = useState("")
-    const{data,error,mutate} =useSWR("/api/getMessage",fetcher)
+    const{data:messages,error,mutate} =useSWR("/api/getMessage",fetcher)
 
-    console.log(data)
+    console.log(messages)
 
-    const addMessage = (e: FormEvent<HTMLFormElement>) => {
+    const addMessage =  async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         if (!input) return;
 
         const messagetosend = input;
-        
+        setInput("");
         const id = uuid();
-
+        
         const message: Message = {
             id,
-            messagetosend,
-            username: "Kingsley Aigbojie",
+            message:messagetosend,
+            username: "Michael Aigbojie",
             created_at: Date.now(),
-            email: "aigbojie@2020gmail.com"
-
+            profile_pic:"https://www.facebook.com/photo/?fbid=1783781928467843&set=a.105940712918648",
+            email: "michael@gmail.com"
+            
         }
         const UploadMessageToUpstash = async () => {
-            const res = await fetch("/api/addMessage", {
+            const data = await fetch("/api/addMessage", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message }),
-            });
-            const data = await res.json()
-            console.log(data)
+            }).then((res)=>res.json())
+           return [data.message,...messages!]
         }
-        UploadMessageToUpstash()
-
+    
+        await mutate(UploadMessageToUpstash,{
+            optimisticData:[message,...messages!],
+            rollbackOnError:true
+        })
     }
+
+
     return (
         <form onSubmit={addMessage} className="flex  fixed bottom-0 px-10 py-5 z-50 w-full bg-white space-x-2 border-t border-gray-100">
             <input type="text"
-                placeholder="Enter Message Here..."
+                placeholder=" Message Here..."
                 onChange={(e) => setInput(e.target.value)}
+                value={input}
                 className="
             flex-1 rounded border border-gray-300 focus:outline-none focus:ring-2  focus:ring-blue-600
             focus:border-transparent px-5 py-3 disabled:opacity-50 disabled:cursor-not-allowed font-bold
