@@ -1,4 +1,4 @@
- 
+  
 "use client"
 import { FormEvent, useState } from "react"
 import { v4 as uuid } from 'uuid'
@@ -24,9 +24,10 @@ export default function Chatinput() {
         const message: Message = {
             id,
             message:messagetosend,
-            username: "Michael Aigbojie",
+            username: "Kingsley Aigbojie",
             created_at: Date.now(),
             profile_pic:"https://www.facebook.com/photo/?fbid=1783781928467843&set=a.105940712918648",
+            
             email: "michael@gmail.com"
             
         }

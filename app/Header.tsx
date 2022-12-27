@@ -10,7 +10,7 @@ let session=true;
     p-10">
        <div className="flex space-x-2">
        <img src="KINGSLEY1.jpg" className="rounded-full object-contain"
-                 height={25}
+                 height={50}
                  width={50}
                      />
         <div>
