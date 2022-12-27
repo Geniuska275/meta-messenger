@@ -47,7 +47,7 @@ export default function Chatinput() {
 
 
     return (
-        <form onSubmit={addMessage} className="flex  fixed bottom-0 px-10 py-5 z-50 w-full bg-white space-x-2 border-t border-gray-100">
+        <form onSubmit={addMessage} className="flex  fixed bottom-0 px-5 py-5 z-50 w-full bg-white space-x-2 border-t border-gray-100">
             <input type="text"
                 placeholder=" Message Here..."
                 onChange={(e) => setInput(e.target.value)}
