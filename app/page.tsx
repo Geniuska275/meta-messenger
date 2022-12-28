@@ -6,6 +6,7 @@ async  function Homepage(){
   const data=await fetch("http://localhost:3000/api/getMessage").then((res)=>res.json())
   
   const messages:Message[]=data.messages;
+  console.log(messages)
   
     return(
         <main>
