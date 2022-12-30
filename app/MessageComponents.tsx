@@ -2,12 +2,15 @@ import Image from 'next/image'
 import React from 'react'
 import { Message } from '../typings'
 import Timeago from "react-timeago"
+import {useSession} from "next-auth/react"
 type Props={
     message:Message
 }
 export const MessageComponents = ( {message}:Props) => {
-    console.log(message)
-    const isUser=true
+   const{data:session}=useSession()
+  
+    const isUser=session?.user?.email ===message.email;
+
   return (
     <div className={`flex w-fit ${isUser && "ml-auto"}`}>
         <div className={`flex-shrink-0 ${isUser && "order-2"}`}>

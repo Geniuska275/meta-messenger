@@ -5,30 +5,34 @@ import { v4 as uuid } from 'uuid'
 import { Message } from "../typings"
 import useSWR from "swr"
 import fetcher from "../utils/fetchMessages"
+import {unstable_getServerSession} from "next-auth/next"
 
-export default function Chatinput() {
+type Props={
+    session:Awaited<ReturnType<typeof unstable_getServerSession>>
+}
+export default function Chatinput({session}:Props) {
     const [input, setInput] = useState("")
     const{data:messages,error,mutate} =useSWR("/api/getMessage",fetcher)
 
-    console.log(messages)
 
     const addMessage =  async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if (!input) return;
+        if (!input || !session) return;
 
         const messagetosend = input;
         setInput("");
         const id = uuid();
+      console.log(session)
         
         const message: Message = {
             id,
             message:messagetosend,
-            username: "Kingsley Aigbojie",
+            username:"",        
             created_at: Date.now(),
-            profile_pic:"https://www.facebook.com/photo/?fbid=1783781928467843&set=a.105940712918648",
+            profile_pic:"",
             
-            email: "michael@gmail.com"
+            email:"michael2020@gmail.com"
             
         }
         const UploadMessageToUpstash = async () => {
@@ -53,6 +57,7 @@ export default function Chatinput() {
                 placeholder=" Message Here..."
                 onChange={(e) => setInput(e.target.value)}
                 value={input}
+                disabled={!session}
                 className="
             flex-1 rounded border border-gray-300 focus:outline-none focus:ring-2  focus:ring-blue-600
             focus:border-transparent px-5 py-3 disabled:opacity-50 disabled:cursor-not-allowed font-bold
