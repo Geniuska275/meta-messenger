@@ -8,6 +8,7 @@ type Props={
 }
 export const MessageComponents = ( {message}:Props) => {
    const{data:session}=useSession()
+   
   
     const isUser=session?.user?.email ===message.email;
 

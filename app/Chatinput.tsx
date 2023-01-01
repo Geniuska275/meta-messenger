@@ -6,11 +6,15 @@ import { Message } from "../typings"
 import useSWR from "swr"
 import fetcher from "../utils/fetchMessages"
 import {unstable_getServerSession} from "next-auth/next"
+import {authOptions} from "../pages/api/auth/[...nextauth]"
+
 
 type Props={
     session:Awaited<ReturnType<typeof unstable_getServerSession>>
 }
 export default function Chatinput({session}:Props) {
+// const session= unstable_getServerSession(authOptions)
+
     const [input, setInput] = useState("")
     const{data:messages,error,mutate} =useSWR("/api/getMessage",fetcher)
 
@@ -23,16 +27,16 @@ export default function Chatinput({session}:Props) {
         const messagetosend = input;
         setInput("");
         const id = uuid();
-      console.log(session)
+    
         
         const message: Message = {
             id,
             message:messagetosend,
-            username:"",        
+            username:session?.user?.name!,        
             created_at: Date.now(),
-            profile_pic:"",
+            profile_pic:session?.user?.image,
             
-            email:"michael2020@gmail.com"
+            email:session?.user?.email!
             
         }
         const UploadMessageToUpstash = async () => {
