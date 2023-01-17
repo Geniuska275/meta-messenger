@@ -5,23 +5,29 @@ import { v4 as uuid } from 'uuid'
 import { Message } from "../typings"
 import useSWR from "swr"
 import fetcher from "../utils/fetchMessages"
+import {useSession} from "next-auth/react"
+
 import {unstable_getServerSession} from "next-auth/next"
 import {authOptions} from "../pages/api/auth/[...nextauth]"
 
 
-type Props={
-    session:Awaited<ReturnType<typeof unstable_getServerSession>>
-}
-export default function Chatinput({session}:Props) {
+// type Props={
+//     session:Awaited<ReturnType<typeof unstable_getServerSession>>
+
+    
+// }
+export default function Chatinput() {
+   const{data:session}=useSession()
+
 // const session= unstable_getServerSession(authOptions)
 
     const [input, setInput] = useState("")
     const{data:messages,error,mutate} =useSWR("/api/getMessage",fetcher)
-
+    //  console.log(session)
 
     const addMessage =  async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
+      
         if (!input || !session) return;
 
         const messagetosend = input;
@@ -34,7 +40,7 @@ export default function Chatinput({session}:Props) {
             message:messagetosend,
             username:session?.user?.name!,        
             created_at: Date.now(),
-            profile_pic:session?.user?.image,
+            profile_pic:session?.user?.image!,
             
             email:session?.user?.email!
             
